@@ -1,0 +1,9 @@
+name: CustomShopUI
+main: AlexPads\ShopUI\TinyPixelDevz\Shop
+version: 3.0.0
+api: [3.0.0]
+author: TinyPixelDevz
+website: saltypixel.ga
+commands:
+ shop:
+  description: "Opens Shop Menu... By: SaltyPixelDevz!"

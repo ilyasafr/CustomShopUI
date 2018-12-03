@@ -1,0 +1,7 @@
+Title: ShopUI
+messages:
+    paid-for: "you bought {amount} of {item} for {cost}!"
+    not-enough-money: "You tried to by {amount} of {name} for {cost} but you were missing {missing} dollars."
+    money: "you have: "
+    money-recieved: "you received {money}"
+    not-enough-items: "you don't have {amount} of {name}"
