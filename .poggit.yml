@@ -2,7 +2,7 @@
 branches:
 - master
 projects:
-  ShopUI-FormAPI-Working:
+  CustomShopUI:
     path: ""
     libs:
     - src: jojoe77777/FormAPI/libFormAPI
