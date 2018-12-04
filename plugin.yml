@@ -1,7 +1,7 @@
 name: CustomShopUI
 main: AlexPads\ShopUI\TinyPixelDevz\Shop
 version: 3.0.0
-api: [3.0.0]
+api: [3.3.2]
 author: TinyPixelDevz
 website: saltypixel.ga
 commands:

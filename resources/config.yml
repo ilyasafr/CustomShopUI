@@ -5,3 +5,5 @@ messages:
     money: "you have: "
     money-recieved: "you received {money}"
     not-enough-items: "you don't have {amount} of {name}"
+	how-many: "How Many items would you Like?"
+    thanks: "Thank you for Shoping at"

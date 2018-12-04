@@ -13,15 +13,40 @@
 # HOW TO USE:
 ## First Put a Category Whatever you Put will be the Name Exactly Like its Spelled.
 ## Then Ta over and Put a - "" in the quotes go in this order:
-#### ItemID:MetaData:AmountOfTheItem:CustomName:Price:SellPrice:FormImageType(0 is path 1 is URL):Image
+#### ItemID:MetaData:YourRecommendedAmountOfTheItem:CustomName:PricePerItemBought:SellPricePerItemSold:FormImageType(0 is path 1 is URL):Image
+
+## Highly Suggested to Adjust Prices!!!!!!!!!! xD
+
 Weapons:
-- "268:0:1:Wooden Sword:2500:0:0:textures/items/wood_sword"
+- "268:0:1:Wooden Sword:250:0:0:textures/items/wood_sword"
 - "272:0:1:Stone Sword:5000:0:0:textures/items/stone_sword"
 - "267:0:1:Golden Sword:10000:0:0:textures/items/gold_sword"
 - "283:0:1:Iron Sword:15000:0:0:textures/items/iron_sword"
 - "276:0:1:Diamond Sword:25000:0:0:textures/items/diamond_sword"
 - "261:0:1:Bow:2000:0:0:textures/items/bow_standby"
 - "262:0:64:Arrow:3000:0:0:textures/items/arrow"
+Blocks:
+- "1:0:64:Stone:12:0:0:textures/blocks/stone"
+- "17:0:64:Oak Wood:12:0:0:textures/blocks/log_oak"
+- "20:0:64:Glass:25:0:0:textures/blocks/glass"
+- "24:0:64:Sandstone:15:0:0:textures/blocks/sandstone_normal"
+- "98:0:64:Stone Bricks:15:0:0:textures/blocks/stonebrick"
+- "155:0:64:Block of Quartz:15:0:0:textures/blocks/quartz_block_side"
+- "88:0:64:Snow:20:0:0:textures/blocks/snow"
+- "44:0:64:Stone Slab:25:0:0:textures/blocks/stone_slab_side"
+- "47:0:64:Bookshelf:15:0:0:textures/blocks/bookshelf"
+Food/Special:
+- "466:0:1:Enchanted Apple:20000:0:1:https//www.digminecraft.com/food_recipes/images/golden_apple2.png"
+- "322:0:1:Golden Apple:15000:0:0:textures/items/apple_golden"
+- "396:0:1:Golden Carrot:10000:0:0:textures/items/carrot_golden"
+- "364:0:16:Steak:5:0:0:textures/items/beef_cooked"
+- "320:0:16:Cooked Pork:6:0:0:textures/items/porkchop_cooked"
+Ores:
+- "264:0:12:Diamond:80:25:0:textures/items/diamond"
+- "265:0:10:Iron Ingot:50:20:0:textures/items/iron_ingot"
+- "266:0:10:Golden Ingot:50:20:0:textures/items/gold_ingot"
+- "263:0:10:Coal:25:5:0:textures/items/coal"
+- "331:0:10:Redstone Dust:25:3:0:textures/items/redstone_dust"
 Tools:
 - "278:0:1:Diamond Pickaxe:25000:0:0:textures/items/diamond_pickaxe"
 - "285:0:1:Golden Pickaxe:15000:0:0:textures/items/gold_pickaxe"
@@ -49,24 +74,6 @@ Armor:
 - "299:0:1:Leather Tunic:10000:0:0:textures/items/leather_chestplate"
 - "300:0:1:Leather Pants:10000:0:0:textures/items/leather_leggings"
 - "301:0:1:Leader Boots:10000:0:0:textures/items/leather_boots"
-Blocks:
-- "1:0:64:Stone:25000:0:0:textures/blocks/stone"
-- "17:0:64:Oak Wood:25000:0:0:textures/blocks/log_oak"
-- "20:0:64:Glass:25000:0:0:textures/blocks/glass"
-- "24:0:64:Sandstone:25000:0:0:textures/blocks/sandstone_normal"
-- "98:0:64:Stone Bricks:25000:0:0:textures/blocks/stonebrick"
-- "155:0:64:Block of Quartz:25000:0:0:textures/blocks/quartz_block_side"
-- "88:0:64:Snow:25000:0:0:textures/blocks/snow"
-- "44:0:64:Stone Slab:25000:0:0:textures/blocks/stone_slab_side"
-- "47:0:64:Bookshelf:25000:0:0:textures/blocks/bookshelf"
-Special:
-- "466:0:1:Enchanted Apple:20000:0:1:https//www.digminecraft.com/food_recipes/images/golden_apple2.png"
-- "322:0:1:Golden Apple:15000:0:1:https//www.digminecraft.com/food_recipes/images/golden_apple.png"
-- "396:0:1:Golden Carrot:10000:0:1:https//www.digminecraft.com/food_recipes/images/golden_carrot.png"
-Heads:
-- "397:0:1:Dragon Head:10000:0:1:https//img4.hostingpics.net/pics/436796skulldragon.png"
-- "397:0:1:Wither Skeleton Skull:5000:0:1:https//img4.hostingpics.net/pics/826437skullwither.png"
-- "397:0:4:Creeper Head:2000:0:1:https//img4.hostingpics.net/pics/556676skullcreeper.png"
-- "397:0:2:Zombie Head:1000:0:1:https//img4.hostingpics.net/pics/415562skullzombie.png"
-- "307:0:3:Skeleton Head:1000:0:1:https//img4.hostingpics.net/pics/589367skullskeleton.png"
+
+
 ...

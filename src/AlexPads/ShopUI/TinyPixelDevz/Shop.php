@@ -21,10 +21,11 @@ use pocketmine\item\Item;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\utils\Config;
 use jojoe77777\FormAPI\SimpleForm;
+use jojoe77777\FormAPI\CustomForm;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 
- class Shop extends PluginBase implements Listener{
+class Shop extends PluginBase implements Listener{
 
 	 public $items;
 	 public $category;
@@ -36,29 +37,17 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 
 	 public function onEnable()
 	 {
-		 foreach (['FormAPI', 'EconomyAPI'] as $depend) {
-			 $plugin = $this->getServer()->getPluginManager()->getPlugin($depend);
-			 $plugin = strtolower($depend);
-			 if (is_null($plugin)) {
-				 $this->getLogger()->error("The plugin" . $depend . " is required in order to use this plugin.");
-				 $this->setEnabled(false);
-			 }
-		 }
 		 $this->saveDefaultConfig();
 		 $this->saveResource("shop.yml");
-		 $this->getLogger()->info("Enabled");
 	 }
 
-	 public function onDisable()
-	 {
-		 $this->getLogger()->info("Disabled");
-	 }
+	 public function onDisable(){
+     }
 
 	 public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool
 	 {
-		 $cmdd = $this->getConfig()->get("Command");
 		 switch ($cmd->getName()) {
-			 case "$cmdd":
+			 case "shop":
 				 if ($sender instanceof Player) {
 					 $this->catForm($sender);
 					 return true;
@@ -72,8 +61,8 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 	 public function catForm(Player $player): void
 	 {
 		 $form = new SimpleForm(function (Player $player, int $data = null) {
-			 $cate = $data;
-			 $this->itemForm($player, $data, $cate);
+			 $cat = $data;
+			 $this->itemForm($player, $data, $cat);
 		 });
 		 $form->setTitle($this->getConfig()->get("Title"));
 		 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
@@ -84,11 +73,11 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 		 $form->sendToPlayer($player);
 	 }
 
-	 public function itemForm(Player $player, $data, $cate): void
+	 public function itemForm(Player $player, $data, $cat): void
 	 {
-		 $form = new SimpleForm(function (Player $player, int $data = null) use ($cate) {
+		 $form = new SimpleForm(function (Player $player, int $data = null) use ($cat) {
 			 $result = $data;
-			 $this->buysellForm($player, $result, $cate);
+			 $this->buysellForm($player, $result, $cat);
 		 });
 		 $form->setTitle($this->getConfig()->get("Title"));
 		 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
@@ -97,97 +86,31 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 			 $category[] = $access;
 		 }
 		 if ($data === null) {
-			 $player->sendmessage("Thankyou for Shopping at" . " " . $this->getConfig()->get("Title"));
+			 $player->sendmessage($this->getConfig()->getNested("message.thanks") . " " . $this->getConfig()->get("Title"));
 		 } else {
-			 foreach ($category[$data] as $items) {
+			 foreach ($category[$cat] as $items) {
 				 $list = explode(":", $items);
 				 $form->addButton($list[3] . "  " . "$" . $list[4], $list[6], $list[7]);
 			 }
 			 $form->sendToPlayer($player);
 		 }
 	 }
-
-	 public function buysellForm(Player $player, $result, $cate): void
+	 public function buysellForm(Player $player, $result, $cat): void
 	 {
-		 $form = new SimpleForm(function (Player $player, int $data = null) use ($cate, $result) {
+		 $form = new SimpleForm(function (Player $player, int $data = null) use ($cat, $result) {
+		 	$buydata = $data;
 			 if ($data === 0) {
-				 $allshop = yaml_parse_file($this->getDataFolder() . "shop.yml");
-				 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
-				 foreach ($allshop as $categoryName => $access) {
-					 $category[] = $access;
-				 }
-				 foreach ($category[$cate] as $items => $itemarray) {
-					 $itemlist[] = $itemarray;
-				 }
-				 $list = explode(":", $itemlist[$result]);
-				 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
-				 if ($money >= $list[4]) {
-					 if ($this->getConfig()->get("Enchants") === false) {
-						 $player->getInventory()->addItem(Item::get($list[0], $list[1], $list[2])->setCustomName($list[3]));
-						 $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->reduceMoney($player, $list[4]);
-						 $message = $this->getConfig()->getNested("messages.paid-for");
-						 $vars = ["{amount}" => $list[2], "{item}" => $list[3], "{cost}" => $list[4]];
-						 foreach ($vars as $var => $replacement) {
-							 $message = str_replace($var, $replacement, $message);
-						 }
-					 } else {
-						 $enchant = Enchantment::getEnchantment($list[6]);
-						 $enchants = new EnchantmentInstance($enchant, $list[7]);
-						 $player->getInventory()->addItem(Item::get($list[0], $list[1], $list[2])->setCustomName($list[3])->addEnchantment($enchants));
-						 $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->reduceMoney($player, $list[4]);
-						 $message = $this->getConfig()->getNested("messages.paid-for");
-						 $vars = ["{amount}" => $list[2], "{item}" => $list[3], "{cost}" => $list[4]];
-						 foreach ($vars as $var => $replacement) {
-							 $message = str_replace($var, $replacement, $message);
-						 }
-					 }
-					 $player->sendMessage($message);
-					 $this->buysellForm($player, $result, $cate);
-				 } else {
-					 $message = $this->getConfig()->getNested("messages.not-enough-money");
-					 $tags = ["{amount}" => $list[2], "{name}" => $list[3], "{cost}" => $list[4], "{missing}" => $list[4] - $money];
-					 foreach ($tags as $tag => $replacement) {
-						 $message = str_replace($tag, $replacement, $message);
-					 }
-					 $player->sendMessage($message);
-					 $this->buysellForm($player, $result, $cate);
-				 }
+			 	$this->amountForm($player, $cat, $result, $buydata);
 			 }
-				 if ($data === 1) {
-					 $allshop = yaml_parse_file($this->getDataFolder() . "shop.yml");
-					 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
-					 foreach ($allshop as $categoryName => $access) {
-						 $category[] = $access;
-					 }
-					 foreach ($category[$cate] as $items => $itemarray) {
-						 $itemlist[] = $itemarray;
-					 }
-					 $list = explode(":", $itemlist[$result]);
-					 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
-					 if ($player->getInventory()->contains(Item::get($list[0], $list[1], $list[2])) === true) {
-						 $player->getInventory()->removeItem(Item::get($list[0], $list[1], $list[2]));
-						 $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->addMoney($player, $list[5]);
-						 $message = $this->getConfig()->getNested("messages.money-recieved");
-						 $vars = ["{amount}" => $list[2], "{item}" => $list[3], "{money}" => $list[5]];
-						 foreach ($vars as $var => $replacement) {
-							 $message = str_replace($var, $replacement, $message);
-						 }
-						 $player->sendMessage($message);
-						 $this->buysellForm($player, $result, $cate);
-					 } else {
-						 $message = $this->getConfig()->getNested("messages.not-enough-items");
-						 $tags = [
-							 "{amount}" => $list[2], "{name}" => $list[3], "{money}" => $list[5], "{missing}" => $list[4] - $money];
-						 foreach ($tags as $tag => $replacement) {
-							 $message = str_replace($tag, $replacement, $message);
-						 }
-						 $player->sendMessage($message);
-						 $this->buysellForm($player, $result, $cate);
-					 }
-				 }
-				 if ($data === 2) {
-					 $this->catForm($player);
-				 }
+			 if ($data === 1) {
+			 	$this->amountForm($player, $cat, $result, $buydata);
+			 }
+			 if ($data === 2) {
+			 	$this->catForm($player);
+			 }
+			 if ($data === null){
+			     $this->catForm($player);
+             }
 		 });
 		 $form->setTitle($this->getConfig()->get("Title"));
 		 $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
@@ -195,7 +118,7 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 		 foreach ($allshop as $categoryName => $access) {
 			 $category[] = $access;
 		 }
-		 foreach ($category[$cate] as $items => $itemarray) {
+		 foreach ($category[$cat] as $items => $itemarray) {
 			 $itemlist[] = $itemarray;
 		 }
 		 if ($result === null) {
@@ -204,10 +127,113 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 			 $list = explode(":", $itemlist[$result]);
 			 $message = $this->getConfig()->getNested("messages.money");
 			 $form->setContent("$message $money$");
-			 $form->addButton("Buy" . " " . $list[2] . " " . "For" . " " . "$" . $list[4]);
-			 $form->addButton("Sell" . " " . $list[2] . " " . "For" . " " . "$" . $list[5]);
+			 $form->addButton("Buy for ". " ". $list[4]. " ". "Each");
+			 $form->addButton("Sell for". " ". $list[5]. " ". "Each");
 			 $form->addButton(TF::RED . TF::BOLD . "Back");
 			 $form->sendToPlayer($player);
 		 }
 	 }
+	public function amountForm(Player $player, $cat, $result, $buydata): void
+	{
+		$form = new CustomForm(function (Player $player, $data) use ($cat, $result, $buydata) {
+			if ($buydata === 0) {
+				$allshop = yaml_parse_file($this->getDataFolder() . "shop.yml");
+				$money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
+				foreach ($allshop as $categoryName => $access) {
+					$category[] = $access;
+				}
+				foreach ($category[$cat] as $items => $itemarray) {
+					$itemlist[] = $itemarray;
+				}
+				$list = explode(":", $itemlist[$result]);
+				$money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
+				if ($money >= $list[4]*$data[1]) {
+					if ($this->getConfig()->get("Enchants") === false) {
+						$player->getInventory()->addItem(Item::get($list[0], $list[1], $data[1])->setCustomName($list[3]));
+						$this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->reduceMoney($player, $list[4]*$data[1]);
+						$message = $this->getConfig()->getNested("messages.paid-for");
+						$vars = ["{amount}" => $list[2], "{item}" => $list[3], "{cost}" => $list[4]*$data[1]];
+						foreach ($vars as $var => $replacement) {
+							$message = str_replace($var, $replacement, $message);
+						}
+					} else {
+						$enchant = Enchantment::getEnchantment($list[6]);
+						$enchants = new EnchantmentInstance($enchant, $list[7]);
+						$player->getInventory()->addItem(Item::get($list[0], $list[1], $data[1])->setCustomName($list[3]));
+						$this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->reduceMoney($player, $list[4]*$data[1]);
+						$message = $this->getConfig()->getNested("messages.paid-for");
+						$vars = ["{amount}" => $list[2], "{item}" => $list[3], "{cost}" => $list[4]*$data[1]];
+						foreach ($vars as $var => $replacement) {
+							$message = str_replace($var, $replacement, $message);
+						}
+					}
+					$player->sendMessage($message);
+					$this->buysellForm($player, $result, $cat);
+				} else {
+					$message = $this->getConfig()->getNested("messages.not-enough-money");
+					$tags = ["{amount}" => $list[2], "{name}" => $list[3], "{cost}" => $list[4]*$data[1], "{missing}" => $list[4]*$data[1] - $money];
+					foreach ($tags as $tag => $replacement) {
+						$message = str_replace($tag, $replacement, $message);
+					}
+					$player->sendMessage($message);
+					$this->buysellForm($player, $result, $cat);
+				}
+			}
+			if ($buydata === 1) {
+				$allshop = yaml_parse_file($this->getDataFolder() . "shop.yml");
+				$money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
+				foreach ($allshop as $categoryName => $access) {
+					$category[] = $access;
+				}
+				foreach ($category[$cat] as $items => $itemarray) {
+					$itemlist[] = $itemarray;
+				}
+				$list = explode(":", $itemlist[$result]);
+				$money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
+				if ($player->getInventory()->contains(Item::get($list[0], $list[1], $data[1])) === true) {
+					$player->getInventory()->removeItem(Item::get($list[0], $list[1], $data[1]));
+					$this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->addMoney($player, $list[5]*$data[1]);
+					$message = $this->getConfig()->getNested("messages.money-recieved");
+					$vars = ["{amount}" => $list[2], "{item}" => $list[3], "{money}" => $list[5]];
+					foreach ($vars as $var => $replacement) {
+						$message = str_replace($var, $replacement, $message);
+					}
+					$player->sendMessage($message);
+					$this->buysellForm($player, $result, $cat);
+				} else {
+					$message = $this->getConfig()->getNested("messages.not-enough-items");
+					$tags = [
+						"{amount}" => $list[2], "{name}" => $list[3], "{money}" => $list[5], "{missing}" => $list[4]*int($data[1]) - $money];
+					foreach ($tags as $tag => $replacement) {
+						$message = str_replace($tag, $replacement, $message);
+					}
+					$player->sendMessage($message);
+					$this->buysellForm($player, $result, $cat);
+				}
+			}
+			if ($buydata === 2) {
+				$this->catForm($player);
+			}
+			if ($data === null){
+				$this->catForm($player);
+			}
+		});
+        $allshop = yaml_parse_file($this->getDataFolder() . "shop.yml");
+        foreach ($allshop as $categoryName => $access) {
+            $category[] = $access;
+        }
+        foreach ($category[$cat] as $items => $itemarray) {
+            $itemlist[] = $itemarray;
+        }
+        if ($result === null) {
+            $this->catForm($player);
+        } else {
+            $list = explode(":", $itemlist[$result]);
+            $form->setTitle($this->getConfig()->get("Title"));
+            $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
+            $form->addLabel($this->getConfig()->getNested("messages.how-many") . $list[3] ."\n" . $this->getConfig()->getNested("messages.money") . $money);
+            $form->addInput("Amount of Item", $list[2], $list[2]);
+            $form->sendToPlayer($player);
+        }
+	}
  }

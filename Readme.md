@@ -12,16 +12,16 @@ All of your forms for KitUI and Any UI will Still work! (Unlike many shopUI Plug
 
 ## Important
 
-- Requires FromAPI and EconomyAPI buy ONEBONE
-- Requires 2.7kb Space xD
+- Requires EconomyAPI by ONEBONE
+- Requires 4kb Space xD
 
 ## Devs/Info
 
-- Made by: TinyPixelDevz
+- Made by: SaltyPixelDevz
 - TeamMembers: AlexPads
 - Colaborator: Thunder33345
 - Discord: https://discord.gg/cSEBKWj
 - Website: https://saltypixel.ga
 - I am Available On my Discord (Link above) to Dev plugins for anyone free of charge unless complicated OR there is already a working plugin. Donations are always Welcome!
-donate at (TinyPixel.ga Link above!)
+donate at (SaltyPixel.ga Link above!)
 
