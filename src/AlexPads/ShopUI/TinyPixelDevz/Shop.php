@@ -231,7 +231,7 @@ class Shop extends PluginBase implements Listener{
             $list = explode(":", $itemlist[$result]);
             $form->setTitle($this->getConfig()->get("Title"));
             $money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
-            $form->addLabel($this->getConfig()->getNested("messages.how-many") . $list[3] ."\n" . $this->getConfig()->getNested("messages.money") . $money);
+            $form->addLabel($this->getConfig()->getNested("messages.how-many") . $list[3]. $this->getConfig()->getNested("messages.how-many2")."\n" . $this->getConfig()->getNested("messages.money") . $money);
             $form->addInput("Amount of Item", $list[2], $list[2]);
             $form->sendToPlayer($player);
         }
