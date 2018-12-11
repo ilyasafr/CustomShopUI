@@ -190,6 +190,9 @@ class Shop extends PluginBase implements Listener{
 				}
 				$list = explode(":", $itemlist[$result]);
 				$money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
+				if ($data === null){
+					$this->catForm($player);
+				}
 				if ($player->getInventory()->contains(Item::get($list[0], $list[1], $data[1])) === true) {
 					$player->getInventory()->removeItem(Item::get($list[0], $list[1], $data[1]));
 					$this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->addMoney($player, $list[5]*$data[1]);
