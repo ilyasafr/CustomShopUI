@@ -1,4 +1,6 @@
 Title: ShopUI
+# If True the command only works when in Survival
+Survival: false
 messages:
   # you can use {money}, {cost], {amount}, {name}, and {item}!
   paid-for: "you bought {amount} of {item} for {cost}!"
@@ -9,3 +11,4 @@ messages:
   how-many: "How Many"
   how-many2: " would you Like?"
   thanks: "Thank you for Shoping at"
+  Survival: "You Must be in Survival to run this Command!"

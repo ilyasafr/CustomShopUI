@@ -49,8 +49,16 @@ class Shop extends PluginBase implements Listener{
 		 switch ($cmd->getName()) {
 			 case "shop":
 				 if ($sender instanceof Player) {
-					 $this->catForm($sender);
-					 return true;
+                     if ($sender->getGamemode() != 0 and $this->getConfig()->get("Survival") === true) {
+                         $sender->sendMessage($this->getConfig()->getNested("messages.Survival"));
+                     }else{
+                         $this->catForm($sender);
+                         return true;
+                     }
+                     if ($this->getConfig()->get("Survival") === false){
+                         $this->catForm($sender);
+                         return true;
+                     }
 				 }
 				 $sender->sendMessage(TF::RED . "Please use this in-game.");
 				 break;
@@ -190,9 +198,9 @@ class Shop extends PluginBase implements Listener{
 				}
 				$list = explode(":", $itemlist[$result]);
 				$money = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($player);
-				if ($data === null){
+				if ($data[1] === null){
 					$this->catForm($player);
-				}
+				}else{
 				if ($player->getInventory()->contains(Item::get($list[0], $list[1], $data[1])) === true) {
 					$player->getInventory()->removeItem(Item::get($list[0], $list[1], $data[1]));
 					$this->getServer()->getPluginManager()->getPlugin("EconomyAPI")->addMoney($player, $list[5]*$data[1]);
@@ -212,7 +220,8 @@ class Shop extends PluginBase implements Listener{
 					}
 					$player->sendMessage($message);
 					$this->buysellForm($player, $result, $cat);
-				}
+				    }
+			    }
 			}
 			if ($buydata === 2) {
 				$this->catForm($player);
