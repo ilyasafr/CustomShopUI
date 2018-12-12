@@ -206,7 +206,7 @@ class Shop extends PluginBase implements Listener{
 				} else {
 					$message = $this->getConfig()->getNested("messages.not-enough-items");
 					$tags = [
-						"{amount}" => $list[2], "{name}" => $list[3], "{money}" => $list[5], "{missing}" => $list[4]*int($data[1]) - $money];
+						"{amount}" => $list[2], "{name}" => $list[3], "{money}" => $list[5], "{missing}" => $list[4]*$data[1] - $money];
 					foreach ($tags as $tag => $replacement) {
 						$message = str_replace($tag, $replacement, $message);
 					}
